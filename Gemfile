@@ -1,5 +1,6 @@
-source :rubygems
+source 'https://rubygems.org'
 
+gem 'activesupport'
 gem 'sinatra'
 gem 'thin'
 gem 'json'

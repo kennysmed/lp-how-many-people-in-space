@@ -4,7 +4,6 @@ require 'json'
 get '/edition/' do
   require './space_parser'
   
-
   etag Time.now.getutc.strftime('%F'+ params["delivery_count"])
   
   err_count = 0
@@ -20,9 +19,6 @@ get '/edition/' do
       end
     end
   end
-
-  
-
 
   if params["delivery_count"] == "0" || params["test"]
     erb :welcome
