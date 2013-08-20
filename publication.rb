@@ -14,7 +14,7 @@ get '/edition/' do
     rescue Exception => e
       err_count +=1
       if err_count > 2
-        p e
+        p "ERROR: #{e}"
         return 500
     
       end
