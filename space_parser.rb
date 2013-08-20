@@ -7,12 +7,6 @@ require 'redis'
 require 'rest-client'
 class SpaceParser
 
-  def initialize
-    if ENV['REDISTOGO_URL']
-      @redistogo_url = ENV['REDISTOGO_URL']
-    end
-  end
-
   def self.redis
     @@redis
   end
@@ -35,8 +29,8 @@ class SpaceParser
   end
   
   def self.fetch_data()  
-    if @redistogo_url
-      uri = URI.parse(@redistogo_url)
+    if ENV['REDISTOGO_URL'] 
+      uri = URI.parse(ENV['REDISTOGO_URL'])
       @redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
     else
       @redis = Redis.new()
