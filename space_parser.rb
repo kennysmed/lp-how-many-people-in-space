@@ -6,7 +6,6 @@ require 'redis'
 
 require 'rest-client'
 class SpaceParser
-  #REDISTOGO_URL = "redis://redistogo:0c04c34a0dd134694eb52b71e5f78af7@barreleye.redistogo.com:10253/"
 
   def initialize
     if ENV['REDISTOGO_URL']
@@ -37,7 +36,7 @@ class SpaceParser
   
   def self.fetch_data()  
     if @redistogo_url
-      uri = URI.parse(REDISTOGO_URL)
+      uri = URI.parse(@redistogo_url)
       @redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
     else
       @redis = Redis.new()
