@@ -54,10 +54,13 @@ class SpaceParser
     is_new = false
     
     # time_changed will be nil the first time we run this.
-    if time_changed != nil && time_now > time_changed && time_now <= (time_changed + 1.day)
+    if time_changed != nil && time_now > time_changed && time_now < (time_changed + 86400)
+      # This changed within the past day, so this subscriber should get the
+      # latest count.
       p "AAA"
       is_new = true
     elsif count.to_s != last_count.to_s
+      # A brand new count!
       p "BBB"
       @redis.set('people_in_space', count)
       @redis.set('time_changed', Time.zone.now.strftime('%Y-%m-%dT%H:%M:%S%z'))
