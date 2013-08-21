@@ -17,13 +17,17 @@ class SpaceParser
     date_changed = @redis.get('date_changed')
     # New format:
     time_changed = @redis.get('time_changed')
+
+    p "last_count: #{last_count}, date_changed: #{date_changed}, time_changed: #{time_changed}"
     
     if time_changed == '' || time_changed.nil?
       if date_changed != '' && date_changed != nil
         time_changed = Time.zone.parse(date_changed+'T23:59:59+0000')
+        p "time_changed a: #{time_changed}"
       end
     else
       time_changed = Time.zone.parse(time_changed)
+      p "time_changed b: #{time_changed}"
     end
     [time_changed, last_count]
   end
@@ -41,6 +45,7 @@ class SpaceParser
     time_changed, last_count = self.stored_data
 
     time_now = Time.zone.now
+    p "time_now: #{time_now}"
 
     feed = RestClient.get("http://howmanypeopleareinspacerightnow.com/space.json")
     people_in_space = JSON.parse(feed)
@@ -50,12 +55,15 @@ class SpaceParser
     
     # time_changed will be nil the first time we run this.
     if time_changed != nil && time_now > time_changed && time_now <= (time_changed + 1.day)
+      p "AAA"
       is_new = true
     elsif count.to_s != last_count.to_s
+      p "BBB"
       @redis.set('people_in_space', count)
       @redis.set('time_changed', Time.zone.now.strftime('%Y-%m-%dT%H:%M:%S%z'))
       is_new = true
     end
+    p "is_new: #{is_new}"
   
     return [is_new, count]
   end
